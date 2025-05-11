@@ -10,6 +10,8 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
 
 class SiteController extends Controller
 {
@@ -75,6 +77,26 @@ class SiteController extends Controller
         return $this->render('ajax-url-form', [
             'model' => $model,
         ]);
+    }
+
+    public function actionQr()
+    {
+        // /site/qr?url_id=1
+        $urlID = Yii::$app->request->get('url_id');
+
+        $qrCode = QrCode::create('https://artello.ru')
+            ->setSize(300)
+            ->setMargin(10)
+            ->setEncoding(new \Endroid\QrCode\Encoding\Encoding('UTF-8'))
+            ->setErrorCorrectionLevel(new \Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh());
+
+        $writer = new PngWriter();
+        $result = $writer->write($qrCode);
+
+        Yii::$app->response->format = Response::FORMAT_RAW;
+        Yii::$app->response->headers->set('Content-Type', $result->getMimeType());
+
+        return $result->getString();
     }
 
     /**
