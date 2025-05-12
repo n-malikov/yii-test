@@ -1,5 +1,7 @@
 # yii-test
 
+живой пример: [yii-test.artello.ru](https://yii-test.artello.ru/)
+
 ### Установка:
 
 ~~~
