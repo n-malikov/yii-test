@@ -42,10 +42,9 @@ $('#ajax-url-form').on('beforeSubmit', function(e) {
         type: 'POST',
         data: form.serialize(),
         success: function (data) {
-            
-            console.log(data);
-            
+            //console.log(data);
             if (data.success) {
+                $('#url-url').val(''); // Очищаем поле
                 $('#result').html('<div class="alert alert-success">' + data.message + '</div>');
             } else {
                 let errors = Object.values(data.errors).flat().join('<br>');

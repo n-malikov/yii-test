@@ -67,7 +67,15 @@ class SiteController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($model->validate()) {
                 $model->save();
-                return ['success' => true, 'message' => sprintf('QR-код: <img src="%s" alt="QR-код">', Url::getQrCodeByID( $model->id ))];
+                return [
+                    'success' => true,
+                    'message' => sprintf(
+                        '<p>QR-код: <img src="%s" alt="QR-код"></p> <p>Целевая ссылка: %s</p> <p>Короткая ссылка: %s</p>',
+                        Url::getQrCodeByID( $model->id ),
+                        Url::getUrlByID( $model->id ),
+                        Url::getShortLinkByID( $model->id ),
+                    )
+                ];
             } else {
                 return ['success' => false, 'errors' => $model->getErrors()];
             }
