@@ -89,7 +89,7 @@ class SiteController extends Controller
     public function actionGeneratedUrls ()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Url::find()->orderBy(['id' => SORT_DESC]),
+            'query' => Url::find(),
             'pagination' => [
                 'pageSize' => 10,
             ],
@@ -103,7 +103,7 @@ class SiteController extends Controller
     public function actionVisitLogs ()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => UrlLog::find()->orderBy(['id' => SORT_DESC]),
+            'query' => UrlLog::find(),
             'pagination' => [
                 'pageSize' => 10,
             ],
