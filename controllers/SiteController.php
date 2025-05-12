@@ -66,7 +66,7 @@ class SiteController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($model->validate()) {
                 $model->save();
-                return ['success' => true, 'message' => 'URL корректен'];
+                return ['success' => true, 'message' => sprintf('QR-код: <img src="%s" alt="QR-код">', Url::getQrCodeByID( $model->id ))];
             } else {
                 return ['success' => false, 'errors' => $model->getErrors()];
             }
@@ -80,7 +80,7 @@ class SiteController extends Controller
     public function actionGeneratedUrls ()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Url::find(),
+            'query' => Url::find()->orderBy(['id' => SORT_DESC]),
             'pagination' => [
                 'pageSize' => 10,
             ],
@@ -89,26 +89,6 @@ class SiteController extends Controller
         return $this->render('generated-urls', [
             'dataProvider' => $dataProvider,
         ]);
-    }
-
-    public function actionQr()
-    {
-        // /site/qr?url_id=1
-        $urlID = Yii::$app->request->get('url_id');
-
-        $qrCode = QrCode::create('https://artello.ru')
-            ->setSize(300)
-            ->setMargin(10)
-            ->setEncoding(new \Endroid\QrCode\Encoding\Encoding('UTF-8'))
-            ->setErrorCorrectionLevel(new \Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh());
-
-        $writer = new PngWriter();
-        $result = $writer->write($qrCode);
-
-        Yii::$app->response->format = Response::FORMAT_RAW;
-        Yii::$app->response->headers->set('Content-Type', $result->getMimeType());
-
-        return $result->getString();
     }
 
     /**

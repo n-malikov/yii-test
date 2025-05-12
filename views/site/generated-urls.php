@@ -17,13 +17,30 @@ echo GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
         'id',
-        'url',
-        'created_at',
         [
-            'label' => 'Мой столбец',
+            'attribute' => 'url',
+            'label' => 'Оригинальная ссылка',
+        ],
+        [
+            'attribute' => 'created_at',
+            'label' => 'Создано',
+        ],
+        [
+            'attribute' => 'visits_count',
+            'label' => 'Переходов',
+        ],
+        [
+            'label' => '',
             'format' => 'raw',
             'value' => function($model) {
-                //return myCustomFunction($model->id);
+                return sprintf('<a href="%s" target="_blank">Короткая ссылка</a>', Url::getShortLinkByID( $model->id ));
+            },
+        ],
+        [
+            'label' => '',
+            'format' => 'raw',
+            'value' => function($model) {
+                return sprintf('<a href="%s" target="_blank">QR</a>', Url::getQrCodeByID( $model->id ));
             },
         ],
     ],

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Yii;
 use yii\db\ActiveRecord;
 
 class Url extends ActiveRecord
@@ -48,7 +49,31 @@ class Url extends ActiveRecord
             $this->addError($attribute, 'Данный URL не доступен');
     }
 
-    public static function isUrlAccessible($url)
+    /**
+     * @param int $url_id
+     * @return string
+     */
+    public static function getShortLinkByID (int $url_id): string
+    {
+        $domain = Yii::$app->request->getHostInfo();
+        return $domain . '/link/?url=' . $url_id;
+    }
+
+    /**
+     * @param int $url_id
+     * @return string
+     */
+    public static function getQrCodeByID (int $url_id): string
+    {
+        $domain = Yii::$app->request->getHostInfo();
+        return $domain . '/link/qr/?url=' . $url_id;
+    }
+
+    /**
+     * @param string $url
+     * @return bool
+     */
+    public static function isUrlAccessible(string $url): bool
     {
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_NOBODY, true); // не загружать тело ответа

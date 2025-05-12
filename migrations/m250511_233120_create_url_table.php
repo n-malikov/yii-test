@@ -13,9 +13,10 @@ class m250511_233120_create_url_table extends Migration
     public function safeUp()
     {
         $this->createTable('{{%url}}', [
-            'id'   => $this->primaryKey(),
-            'url' => $this->string()->notNull(),
-            'created_at' => $this->dateTime()->notNull(),
+            'id'           => $this->primaryKey(),
+            'url'          => $this->string()->notNull(),
+            'visits_count' => $this->integer()->unsigned()->defaultValue(0),
+            'created_at'   => $this->dateTime()->notNull(),
         ]);
     }
 
