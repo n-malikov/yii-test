@@ -13,8 +13,6 @@ composer install
 # composer install --no-dev
 php yii migrate
 
-sudo chown -R ${USER}:www-data runtime
-sudo chown -R ${USER}:www-data web/assets
-chmod -R 775 runtime
-chmod -R 775 web/assets
+sudo chown -R www-data:www-data runtime
+sudo chown -R www-data:www-data web/assets
 ~~~
