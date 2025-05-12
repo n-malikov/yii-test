@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Url;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -73,6 +74,20 @@ class SiteController extends Controller
 
         return $this->render('ajax-url-form', [
             'model' => $model,
+        ]);
+    }
+
+    public function actionGeneratedUrls ()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => Url::find(),
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+
+        ]);
+        return $this->render('generated-urls', [
+            'dataProvider' => $dataProvider,
         ]);
     }
 
