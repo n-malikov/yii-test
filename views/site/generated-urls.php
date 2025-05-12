@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 echo GridView::widget([
     'dataProvider' => $dataProvider,
     'columns' => [
-        'id',
+        //'id',
         [
             'attribute' => 'url',
             'label' => 'Оригинальная ссылка',

@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Url;
+use app\models\UrlLog;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Writer\PngWriter;
 use Yii;
@@ -22,7 +23,15 @@ class LinkController extends Controller
         if (!$model)
             throw new NotFoundHttpException('Запрашиваемая страница не найдена.');
 
-        return $model->url;
+        $model->visits_count = ++$model->visits_count;
+        $model->update();
+
+        $logModel = new UrlLog();
+        $logModel->url_id = $model->id;
+        $logModel->ip     = Yii::$app->request->userIP;
+        $logModel->save();
+
+        return Yii::$app->response->redirect( $model->url );
     }
 
     public function actionQr()

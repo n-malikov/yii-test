@@ -5,6 +5,12 @@ namespace app\models;
 use Yii;
 use yii\db\ActiveRecord;
 
+/**
+ * @property int $id
+ * @property string $url
+ * @property int $visits_count
+ * @property string $created_at
+ */
 class Url extends ActiveRecord
 {
     public static function tableName()
@@ -23,11 +29,10 @@ class Url extends ActiveRecord
 
     public function beforeSave($insert)
     {
-        if (parent::beforeSave($insert)) {
+        if ($insert)
             $this->created_at = date('Y-m-d H:i:s');
-            return true;
-        }
-        return false;
+
+        return parent::beforeSave($insert);
     }
 
     public function validateUrlManually($attribute, $params)
@@ -43,10 +48,22 @@ class Url extends ActiveRecord
         // Проверка валидности URL
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
             $this->addError($attribute, 'Некорректный формат URL');
+            return;
         }
 
         if (!Url::isUrlAccessible($url))
             $this->addError($attribute, 'Данный URL не доступен');
+    }
+
+
+    /**
+     * @param int $url_id
+     * @return string
+     */
+    public static function getUrlByID (int $url_id): string
+    {
+        $model = self::findOne($url_id);
+        return ($model != null) ? $model->url : '';
     }
 
     /**

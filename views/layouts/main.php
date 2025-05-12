@@ -48,7 +48,11 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 'url' => ['/site/generated-urls']
             ],
             [
-                'label' => 'Проект на github',
+                'label' => 'Логи переходов',
+                'url' => ['/site/visit-logs']
+            ],
+            [
+                'label' => 'Проект на GitHub',
                 'url' => 'https://github.com/n-malikov/yii-test',
                 'linkOptions' => ['target' => '_blank'],
             ],

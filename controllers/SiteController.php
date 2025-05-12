@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Url;
+use app\models\UrlLog;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -87,6 +88,20 @@ class SiteController extends Controller
 
         ]);
         return $this->render('generated-urls', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionVisitLogs ()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => UrlLog::find()->orderBy(['id' => SORT_DESC]),
+            'pagination' => [
+                'pageSize' => 10,
+            ],
+
+        ]);
+        return $this->render('visit-logs', [
             'dataProvider' => $dataProvider,
         ]);
     }
