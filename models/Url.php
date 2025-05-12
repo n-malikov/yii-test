@@ -2,34 +2,50 @@
 
 namespace app\models;
 
-use yii\base\Model;
+use yii\db\ActiveRecord;
 
-class Url extends Model
+class Url extends ActiveRecord
 {
-    public $url;
+    public static function tableName()
+    {
+        return '{{url}}';
+    }
 
     public function rules()
     {
         return [
             ['url', 'required'],
+            ['url', 'string', 'max' => 255],
             ['url', 'validateUrlManually'],
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->created_at = date('Y-m-d H:i:s');
+            return true;
+        }
+        return false;
     }
 
     public function validateUrlManually($attribute, $params)
     {
         $url = $this->$attribute;
 
-        // Проверка на наличие схемы
+        // Проверка на наличие протокола
         if (!preg_match('~^https?://~i', $url)) {
             $this->addError($attribute, 'Ссылка должна начинаться с http:// или https://');
             return;
         }
 
-        // Проверка валидности URL (без использования 'url'-валидатора)
+        // Проверка валидности URL
         if (!filter_var($url, FILTER_VALIDATE_URL)) {
             $this->addError($attribute, 'Некорректный формат URL');
         }
+
+        if (!Url::isUrlAccessible($url))
+            $this->addError($attribute, 'Данный URL не доступен');
     }
 
     public static function isUrlAccessible($url)

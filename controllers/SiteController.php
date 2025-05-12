@@ -64,10 +64,7 @@ class SiteController extends Controller
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             if ($model->validate()) {
-                $url = $model->url;
-                if (!Url::isUrlAccessible($url))
-                    return ['success' => false, 'errors' => ['url' => ['Ссылка недоступна или не существует']]];
-
+                $model->save();
                 return ['success' => true, 'message' => 'URL корректен'];
             } else {
                 return ['success' => false, 'errors' => $model->getErrors()];
